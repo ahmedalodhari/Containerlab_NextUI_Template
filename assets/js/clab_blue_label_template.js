@@ -2,6 +2,13 @@
 
     data = JSON.parse(data)
     var activeLayout = ''
+    var defaultIconType = 'router'
+
+    for (var key in data.nodes) {
+      if (!("group" in data.nodes[key])) {
+        data.nodes[key]["group"]  = 'N/D';
+      }
+    }
 
     nx.define('CustomLinkLabel', nx.graphic.Topology.Link, {
       properties: {
@@ -223,7 +230,14 @@
         adaptive: true,
         nodeConfig: {
             label: 'model.name',
-            iconType: 'model.group',
+            iconType: function (model){
+              if (model._data.group === 'N/D'){
+                return defaultIconType
+              }
+              else {
+                return 'model._data.group'
+              }
+            },
         },
         linkConfig: {
             linkType: 'curve',
@@ -267,7 +281,6 @@
       layout.direction('horizontal');
       layout.levelBy(function(node, model) {
         return model.get('group');
-
       });
       topo.activateLayout('hierarchicalLayout');
     }
