@@ -235,7 +235,7 @@
                 return defaultIconType
               }
               else {
-                return 'model._data.group'
+                return model._data.group
               }
             },
         },
